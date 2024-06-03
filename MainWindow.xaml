@@ -1,0 +1,141 @@
+﻿<Window x:Class="GitCreativeWorkRaport.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:GitCreativeWorkRaport.ViewModels"
+        mc:Ignorable="d"
+        Title="Generator raportów" Height="800" Width="1000">
+    <Window.DataContext>
+        <viewmodels:MainViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" >
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Data początkowa" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Margin="10"/>
+                <DatePicker VerticalAlignment="Center" HorizontalAlignment="Center" SelectedDate="{Binding StartTime,Mode=TwoWay}" IsEnabled="{Binding ProcessStartedNeg}"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Data końcowa" Margin="10" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <DatePicker VerticalAlignment="Center" HorizontalAlignment="Center" SelectedDate="{Binding EndTime,Mode=TwoWay}" IsEnabled="{Binding ProcessStartedNeg}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Login Git" Margin="20,10,10,10" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBox Width="150" Text="{Binding Path=Login,Mode=TwoWay}" IsEnabled="{Binding ProcessStartedNeg}"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10" VerticalAlignment="Center">
+            <TextBlock Text="Ścieżka do repozytorium GIT" Height="16"/>
+            <Button Content="Dodaj" Margin="5" Padding="5" Command="{Binding AddRepoCommand}" IsEnabled="{Binding ProcessStartedNeg}"/>
+        </StackPanel>
+        <ListView Margin="10" Grid.Row="2" ItemsSource="{Binding Repos}" IsEnabled="{Binding ProcessStartedNeg}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="30">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Index}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Ścieżka na dysku" Width="700">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Path}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Usuń" Width="50">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Usuń" Command="{Binding RemoveCommand}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Content="Generuj" Margin="5" Padding="5" Command="{Binding GenerateCommand}" IsEnabled="{Binding ProcessStartedNeg}"/>
+            <StackPanel Orientation="Vertical" Margin="5">
+                <TextBlock Text="Ilość dni pracy" />
+                <TextBox Text="{Binding DayCount, Mode=TwoWay}" IsEnabled="{Binding ProcessStartedNeg}"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="5">
+                <TextBlock Text="Suma godzin"/>
+                <TextBox Text="{Binding HoursCount, Mode=OneWay}" IsReadOnly="True"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="5">
+                <TextBlock Text="Procent"/>
+                <TextBox Text="{Binding Percent, Mode=OneWay}" IsReadOnly="True"/>
+            </StackPanel>
+            <Button Content="Zapisz dokument" Margin="5" Padding="5" Command="{Binding SaveCommand}" IsEnabled="{Binding ProcessStartedNeg}"/>
+        </StackPanel>
+
+        <ListView Grid.Row="4" MinHeight="200" ItemsSource="{Binding Commits}" IsEnabled="{Binding ProcessStartedNeg}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="30">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Index}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Data" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Date}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Repo" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=RepoName}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Id commita" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Id}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Nazwa commita" Width="500">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=CommitName}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Czas poświęcony na stworzenie utworu w godzinach" Width="300">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox MinWidth="80" MaxWidth="300" Text="{Binding Path= Time, Mode=TwoWay}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Usun" Width="50">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Command="{Binding RemoveCommand}" Content="Usuń"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>

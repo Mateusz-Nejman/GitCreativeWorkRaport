@@ -37,10 +37,12 @@ namespace GitCreativeWorkRaport
                                 CommitName = FilterCommitMessage(commit),
                                 Date = commit.Author.When.Date.ToString("yyyy-MM-dd")
                             };
-                            Application.Current.Dispatcher.Invoke(() => output.Add(raportData));
-                        }
 
-                        repo?.Dispose();
+                            if(output.FirstOrDefault(r => r.Id == raportData.Id, null) == null)
+                            {
+                                Application.Current.Dispatcher.Invoke(() => output.Add(raportData));
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)

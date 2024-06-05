@@ -178,6 +178,11 @@ namespace GitCreativeWorkRaport.ViewModels
             return hoursCount;
         }
 
+        private void RecalculateHours()
+        {
+            HoursCount = CalculateHoursCount();
+        }
+
         private void AddRepoPath()
         {
             OpenFolderDialog dialog = new()
@@ -213,7 +218,7 @@ namespace GitCreativeWorkRaport.ViewModels
             Commits.Clear();
             HoursCount = 0;
             Percent = 0;
-            await CommitReceiver.Receive(Repos, Login, StartTime, EndTime, Commits);
+            await CommitReceiver.Receive(Repos, Login, StartTime, EndTime, Commits, RecalculateHours);
 
             foreach (var commit in Commits.Select((value, i) => new { i, value }))
             {

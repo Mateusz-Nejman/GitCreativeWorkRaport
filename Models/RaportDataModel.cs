@@ -5,6 +5,7 @@ namespace GitCreativeWorkRaport.Models
 {
     internal class RaportDataModel : PropertyChangedBase
     {
+        private readonly Action _recalculateHourAction;
         private readonly ObservableCollection<RaportDataModel> _collection;
         private double _time;
         private int _index;
@@ -20,6 +21,7 @@ namespace GitCreativeWorkRaport.Models
             {
                 _time = value;
                 OnPropertyChanged();
+                _recalculateHourAction?.Invoke();
             }
         }
 
@@ -75,8 +77,9 @@ namespace GitCreativeWorkRaport.Models
 
         public ICommand RemoveCommand { get; }
 
-        public RaportDataModel(ObservableCollection<RaportDataModel> collection)
+        public RaportDataModel(ObservableCollection<RaportDataModel> collection, Action recalculateHourAction)
         {
+            _recalculateHourAction = recalculateHourAction;
             _collection = collection;
             RemoveCommand = new ActionCommand(() =>
             {

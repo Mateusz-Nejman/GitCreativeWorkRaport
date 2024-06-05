@@ -7,7 +7,7 @@ namespace GitCreativeWorkRaport
 {
     internal static class CommitReceiver
     {
-        public static async Task Receive(ObservableCollection<RepoModel> repos, string gitLogin, DateTime startDate, DateTime endDate, ObservableCollection<RaportDataModel> output)
+        public static async Task Receive(ObservableCollection<RepoModel> repos, string gitLogin, DateTime startDate, DateTime endDate, ObservableCollection<RaportDataModel> output, Action recalculateHoursAction)
         {
             output.Clear();
             await Task.Run(() =>
@@ -30,7 +30,7 @@ namespace GitCreativeWorkRaport
 
                         foreach (var commit in commits.OrderByDescending(c => c.Author.When.Date.ToString("yyyy-MM-dd")))
                         {
-                            var raportData = new RaportDataModel(output)
+                            var raportData = new RaportDataModel(output, recalculateHoursAction)
                             {
                                 Id = commit.Id.ToString()[..8],
                                 RepoName = repo?.Network.Remotes.FirstOrDefault()?.Url.Split("/").Last() ?? string.Empty,

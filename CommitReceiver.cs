@@ -26,7 +26,7 @@ namespace GitCreativeWorkRaport
                                     x.Committer.When.DateTime <= endDate));
                         }
 
-                        commits = commits.Distinct().GroupBy(commit => commit.Id).SelectMany(a => a);
+                        commits = commits.Distinct().GroupBy(commit => commit.Id).SelectMany(a => a).ToList();
 
                         foreach (var commit in commits.OrderByDescending(c => c.Author.When.Date.ToString("yyyy-MM-dd")))
                         {
@@ -43,6 +43,8 @@ namespace GitCreativeWorkRaport
                                 Application.Current.Dispatcher.Invoke(() => output.Add(raportData));
                             }
                         }
+
+                        repo?.Dispose();
                     }
                 }
                 catch (Exception ex)

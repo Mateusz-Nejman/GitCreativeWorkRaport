@@ -1,11 +1,10 @@
-﻿using DocumentFormat.OpenXml.Packaging;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
-using System;
+using GitCreativeWorkRaport.Models;
 using System.Collections.ObjectModel;
 using System.DirectoryServices;
 using System.Security.Principal;
-using DocumentFormat.OpenXml;
-using GitCreativeWorkRaport.Models;
 
 namespace GitCreativeWorkRaport
 {
@@ -151,8 +150,9 @@ namespace GitCreativeWorkRaport
             CreateTextWithAlignement(JustificationValues.Left, fullText);
             Paragraph para = _body.AppendChild(new Paragraph());
 
-            Text[] signature = [ new("Podpis pracodawcy \t\t\t\t\t\t") { Space = SpaceProcessingModeValues.Preserve }
-                                            , new("Podpis pracownika") ];
+            Text[] signature = [new("Podpis pracodawcy \t\t\t\t\t\t") { Space = SpaceProcessingModeValues.Preserve }
+                                            ,
+                new("Podpis pracownika")];
 
             CreateTextWithAlignement(JustificationValues.Center, signature);
         }

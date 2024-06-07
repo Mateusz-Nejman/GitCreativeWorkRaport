@@ -16,7 +16,7 @@ namespace GitCreativeWorkRaport.Models
 
         public static ConfigModel Load(string path)
         {
-            if(!File.Exists(path))
+            if (!File.Exists(path))
             {
                 return new ConfigModel();
             }

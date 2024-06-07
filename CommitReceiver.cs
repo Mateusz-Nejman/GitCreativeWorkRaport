@@ -26,22 +26,27 @@ namespace GitCreativeWorkRaport
                                     x.Committer.When.DateTime <= endDate));
                         }
 
-                        commits = commits.Distinct().GroupBy(commit => commit.Id).SelectMany(a => a).ToList();
+                        commits = commits.Distinct().GroupBy(commit => commit.Id).SelectMany(a => a).
+                        OrderByDescending(c => c.Author.When.Date.ToString("yyyy-MM-dd")).ToList();
 
-                        foreach (var commit in commits.OrderByDescending(c => c.Author.When.Date.ToString("yyyy-MM-dd")))
+                        foreach (var commit in commits)
                         {
+                            var id = commit.Id.ToString()[..8];
+
+                            if (output.FirstOrDefault(r => r.Id == id, null) != null)
+                            {
+                                continue;
+                            }
+
                             var raportData = new RaportDataModel(output, recalculateHoursAction)
                             {
-                                Id = commit.Id.ToString()[..8],
+                                Id = id,
                                 RepoName = repo?.Network.Remotes.FirstOrDefault()?.Url.Split("/").Last() ?? string.Empty,
                                 CommitName = FilterCommitMessage(commit),
                                 Date = commit.Author.When.Date.ToString("yyyy-MM-dd")
                             };
 
-                            if(output.FirstOrDefault(r => r.Id == raportData.Id, null) == null)
-                            {
-                                Application.Current.Dispatcher.Invoke(() => output.Add(raportData));
-                            }
+                            Application.Current.Dispatcher.Invoke(() => output.Add(raportData));
                         }
 
                         repo?.Dispose();

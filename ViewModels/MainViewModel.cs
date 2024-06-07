@@ -154,7 +154,7 @@ namespace GitCreativeWorkRaport.ViewModels
 
         private void Commits_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            foreach(var repo in Commits.Select((value, index) => new { index, value }))
+            foreach (var repo in Commits.Select((value, index) => new { index, value }))
             {
                 repo.value.Index = repo.index + 1;
             }
@@ -193,7 +193,7 @@ namespace GitCreativeWorkRaport.ViewModels
             bool? result = dialog.ShowDialog();
             if (result == true)
             {
-                if(Directory.Exists(dialog.FolderName))
+                if (Directory.Exists(dialog.FolderName))
                 {
                     Repos.Add(new RepoModel(Repos)
                     {
